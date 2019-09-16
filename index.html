@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>War Logger</title>
+    <script src="https://unpkg.com/redux-thunk@2.3.0/dist/redux-thunk.min.js"></script>
+    <script src="https://unpkg.com/redux/dist/redux.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/immutable/3.8.2/immutable.js"></script>
+    <script src="scripts/bundle.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+    <div class="main">
+        <div class="setup-battle">
+            <h2>Setup Battle</h2>
+            <div class="pre-battle">
+                <span>Added Characters:</span>
+                <ul class="char-list"></ul>
+                <button class="start-battle">Roll Initiatives</button>
+            </div>
+            <div class="set-initiatives-wrapper hide">
+                <div class="set-initiatives"></div>
+                <button class="commence-battle">Commence Battle</button>
+            </div>
+        </div>
+        <div class="battle-zone hide">
+            <table class="war-grounds">
+                <thead>
+                    <th></th>
+                    <th>Name</th>
+                    <th>HP</th>
+                    <th>Aggro</th>
+                    <th>Conditions</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div class="battle-actions">
+                <div class="action-row">
+                    <span>Attack</span>
+                    <select class="battle-actions-attack-select selectC"></select>
+                    <span>for</span>
+                    <input class="reg-input battle-actions-attack-damage small inv">
+                    <button class="battle-actions-attack-submit">Damage</button>
+                </div>
+            </div>
+        </div>
+        <div class="char-library">
+            <div class="add-char">
+                <div class="add-char-title">Add Character/NPC</div>
+                <div class="add-char-form hide">
+                    <div class="row">
+                        Name <input type="text" class="add-char-input reg-input" data-name="name" value="Ben">
+                    </div>
+                    <div class="row">
+                        Initiative <input type="text" class="add-char-input reg-input" data-name="initiative">
+                    </div>
+                    <div class="row">
+                        AC <input type="text" class="add-char-input reg-input" data-name="ac" value="20">
+                    </div>
+                    <div class="row">
+                        AB <input type="text" class="add-char-input reg-input" data-name="ab">
+                    </div>
+                    <div class="row">
+                        HP <input type="text" class="add-char-input reg-input" data-name="hp">
+                    </div>
+                    <div class="row">
+                        XP <input type="text" class="add-char-input reg-input" data-name="xp">
+                    </div>
+                    <div class="row">
+                        Type
+                        <select class="add-char-input reg-input" data-name="type">
+                            <option value="npc">NPC</option>
+                            <option value="char">Character</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <button class="add-char-submit">Add</button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <span class="big2">Characters:</span>
+                <ul class="char-list"></ul>
+                <span class="big2">NPCs:</span>
+                <ul class="npc-list"></ul>
+            </div>
+        </div>
+    </div>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/data.js"></script>
+    <script src="scripts/char_lib.js"></script>
+    <script src="scripts/battle_setup.js"></script>
+    <script src="scripts/battle_initiatives.js"></script>
+    <script src="scripts/battle.js"></script>
+    <script src="scripts/battle_actions.js"></script>
+</body>
+</html>

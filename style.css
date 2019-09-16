@@ -1,0 +1,137 @@
+body {
+    background: #0f0f0f;
+}
+
+.main {
+    margin: auto;
+    color: #d8d8d8;
+    font-size: 13px;
+    max-width: 440px;
+    text-align: center;
+    font-family: Verdana;
+}
+
+.battle-zone {
+    margin: 20px;
+    border: 1px solid white;
+}
+
+.char-library {
+    top: 0px;
+    left: 50px;
+    position: fixed;
+    border: 1px white solid;
+    padding: 0 40px 40px 40px;
+}
+
+.add-char {
+    padding: 5px;
+    margin: 40px auto;
+    width: 300px;
+    background: #565656;
+}
+
+.add-char-title {
+    font-size: 16px;
+    cursor: pointer;
+    margin: 11px;
+    font-weight: bold;
+}
+
+.initiative-row {
+    line-height: 24px;
+}
+
+.set-initiatives {
+    margin: 20px 0;
+}
+
+.current-turn, .current-turn td {
+    background: #4b4b4b;
+}
+
+.action-row {
+    padding: 16px 0;
+}
+
+.clickable { cursor: pointer; }
+.clickable:hover { color: aquamarine }
+
+.row {
+    padding: 4px;
+}
+
+.reg-input {
+    width: 100px;
+    padding: 2px 3px;
+    border: 1px solid;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.inv {
+    color: white;
+    background: #333;
+}
+
+.selectC {
+    padding: 0px 10px;
+    color: white;
+    background: #333;
+    border: 1px solid white;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+button {
+    color: white;
+    cursor: pointer;
+    background: #333;
+    border: 1px solid;
+    padding: 2px 13px;
+    border-radius: 3px;
+}
+
+.right-f {
+    float: right;
+}
+
+.big1 {
+    font-size: 15px;
+}
+.big2 {
+    font-size: 17px;
+}
+
+.hide {
+    display: none;
+}
+
+ul {
+    padding-inline-start: 0;
+}
+
+li {
+    list-style: none;
+    padding: 1px;
+}
+.small { width: 60px; }
+
+hr {
+    border-width: 1px;
+    border-style: dotted;
+}
+
+table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+table th {
+    padding: 6px;
+    font-style: 15px;
+}
+
+table td {
+    padding: 4px;
+}
