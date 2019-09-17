@@ -1,14 +1,14 @@
 
 ((WarLogger) => {
 
-	const dieRollRE = /^(\d*)d(\d+)$/,
+	const dieRollRE = /^(\d*)d(\d+)(\s*\+\s*(\d+))?$/,
 		rollDie = (sides) => Math.floor(Math.random()*sides) + 1,
 		wrapIfAny = str => str ? ` (${str})` : '';
 
 	function rollDice(str) {
-		let [, rolls, sides ] = dieRollRE.exec(str) || [];
+		let [, rolls, sides,, staticAdd ] = dieRollRE.exec(str) || [];
 		if (rolls) {
-			return _.reduce(Array(+rolls), acc => acc + rollDie(sides), 0);
+			return _.reduce(Array(+rolls), acc => acc + rollDie(sides), 0) + (+staticAdd || 0);
 		} else {
 			return '';
 		}
@@ -36,15 +36,19 @@
 			fullList[i].rolledInitiative = $input.val();
 			fullList[i].rolledHP = +(rollDice(fullList[i].hp) || fullList[i].hp);
 		});
-		WarLogger.commenceBattle(fullList.sort((a, b) => b.rolledInitiative - a.rolledInitiative));
+		WarLogger
+			.dispatch('commenceBattle', fullList.sort((a, b) => b.rolledInitiative - a.rolledInitiative))
+			.dispatch('initializeBattleActions');
 	})
 
-	WarLogger.goToInitiatives = (chars, npcs) => {
+	WarLogger.defineAction('goToInitiatives', (state, chars, npcs) => {
 		$setInitsWrapper.show();
 		inputMap = [];
 		$setInits.empty();
 		fullList = chars.concat(npcs);
 		renderBattleList();
-	}
+		inputMap[0].focus();
+		return state.set('uiStage', 'ROLL_INITIATIVES');
+	})
 
 })(window.WarLogger);

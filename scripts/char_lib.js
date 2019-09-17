@@ -9,11 +9,20 @@
 		$submit = $addChar.f('.add-char-submit'),
 		$title = $addChar.f('.add-char-title'),
 		$form = $addChar.f('.add-char-form'),
+		demiInit = _.once(() => {
+			setTimeout(() => {
+				let $npc = $('.char-library .npc-list').f('.clickable').first();
+				$npc.click(); $npc.click(); $npc.click();
+				$('.char-library .char-list').f('.clickable').first().click();
+			}, 200)
+		}),
 		renderGroup = ($charList, list, isNPC) => _.each(list, (item, i) =>
 			$charList.append($('<li>').addClass('clickable').html(item.name)
-				.on('click', () => WarLogger.addCharToBattle(i, isNPC))
-				.append($('<span>').addClass('right-f').html('x').on('click', () =>
-					WarLogger.data.deleteChar(i, isNPC)))));
+				.on('click', () => WarLogger.dispatch('addCharToBattle', i, isNPC))
+				.append($('<span>').addClass('right-f').html('x').on('click', (e) => {
+					WarLogger.data.deleteChar(i, isNPC);
+					e.stopPropagation();
+				}))));
 
 	$title.on('click', () => $form.toggleClass('hide'));
 	$submit.on('click', () => {
@@ -25,22 +34,13 @@
 		(charObj.type === 'npc' ? WarLogger.data.addNPC : WarLogger.data.addChar)(charObj);
 	})
 
-	WarLogger.addCharReset = () => $inputs.val('');
-
-	WarLogger.renderCharList = (chars, npcs) => {
+	WarLogger.defineAction('INIT_LIB', (state, chars, npcs) => {
 		$charList.empty();
 		$npcList.empty();
 		renderGroup($charList, chars, false);
 		renderGroup($npcList, npcs, true);
-	};
+		demiInit();
+		return state.set('uiStage', 'INITIALIZED');
+	});
 
-	WarLogger.data.renderList();
-
-
-	setTimeout(() => {
-		$('.char-library .char-list').f('.clickable').first().click();
-		$('.char-library .npc-list').f('.clickable').first().click();
-		$('.char-library .npc-list').f('.clickable').first().click();
-		$('.char-library .npc-list').f('.clickable').first().click();
-	}, 200)
 })(window.WarLogger);

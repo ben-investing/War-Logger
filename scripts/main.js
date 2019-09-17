@@ -1,7 +1,6 @@
 window.cl = console.log;
 
-((redux, immutable, reduxThunk) => {
-
+((redux, immutable, reduxThunk, WarLogger) => {
 
 	const
 		{ createStore, combineReducers, applyMiddleware, compose } = redux,
@@ -12,11 +11,9 @@ window.cl = console.log;
 		actionLog = [],
 		wait3 = () => new Promise(res => setTimeout(res, 3000)),
 		logger = store => thunkedDispatch => action => {
-			cl('Dispatching Action:', action);
+			cl(action);
 			actionLog.push(action);
-			let result = thunkedDispatch(action);
-			cl('Action Done');
-			return result;
+			return thunkedDispatch(action);
 		},
 		errorMonitor = store => thunkedDispatch => action => {
 			try {
@@ -38,46 +35,38 @@ window.cl = console.log;
 	let
 		initialStates = {
 			Battle: Map({
+				uiStage: 'UNINITIALIZED',
 				chars: List(),
-				charTurn: 0, // Current Char's index
+				currentChar: 0,
 				round: 0,
 				charConditions: List(), // Objects that contain expiry, label, char, modifications
 				aggroMap: List() // Char indices?
 			})
 		},
 		buildReducer = (actionMap, initialState) =>
-			(state = initialState, action) => actionMap[action.type] ? actionMap[action.type](state, action) : state,
+			(state = initialState, action) => actionMap[action.type] ? actionMap[action.type](state, ...action.args) : state,
 
 		pushIn = (root, path, value) => root.setIn([...path, root.getIn(path).size], value),
 		actionMap = {
-			Battle: {
-				'START_BATTLE': (state, action) => state
-					.set('charTurn', 0)
-					.set('round', 0)
-					.set('charConditions', List())
-					.set('allChars', List(action.allChars)),
-				'PASS_TURN': (state, action) => state,
-				'ADD_COND': (state, action) => state,
-				'DAMAGE': (state, action) => state,
-			}
+			Battle: WarLogger.reducers
 		},
 		store = createStore(combineReducers({
 			Battle: buildReducer(actionMap.Battle, initialStates.Battle)
 		}), initialStates, composeEnhancers(applyMiddleware(...middlewareCollection))),
-		WarLogger = {
-			trigger: action => store.dispatch(action),
-			subscribe: handler => store.subscribe(handler),
-			getBattleState: () => store.getState().Battle
-		};
+		printUIStage = () => cl('UI Stage -', store.getState().Battle.get('uiStage'));
 
-	store.subscribe(() => cl('STATE CHANGED', store.getState()));
+	Object.assign(WarLogger, {
+		dispatch: (type, ...args) => store.dispatch({ type, args }) && WarLogger,
+		subscribe: handler => store.subscribe(handler),
+		getBattleState: () => store.getState().Battle
+	});
 
-	window.WarLogger = WarLogger;
+	store.subscribe(printUIStage);
 
-	window.printLog = () => actionLog.forEach(i => cl(i));
+	printUIStage();
+	WarLogger.data.renderList();
 
-
-})(window.Redux, window.Immutable, window.ReduxThunk.default)
+})(window.Redux, window.Immutable, window.ReduxThunk.default, window.WarLogger)
 
 
 

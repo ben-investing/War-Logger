@@ -22,7 +22,7 @@
 				}
 			}
 			$charList.append($('<li>').addClass('clickable')
-				.html(WarLogger.data.getChar(charIndex, isNPC).name + duplicate)
+				.html(WarLogger.data.getChar(charIndex, isNPC).name + ' ' + duplicate)
 				.on('click', () => removeFromBattle(i, isNPC)))
 		}),
 		renderBattleAll = () => {
@@ -35,7 +35,7 @@
 	$startBattle.on('click', () => {
 		$wrapper.hide();
 		npcDuplicates = {};
-		WarLogger.goToInitiatives(
+		WarLogger.dispatch('goToInitiatives',
 			charsAdded.map(index => _.clone(WarLogger.data.getChar(index, false))),
 			npcsAdded.map((charIndex, i) => {
 				let npc = _.clone(WarLogger.data.getChar(charIndex, true)),
@@ -53,9 +53,10 @@
 		)
 	})
 
-	WarLogger.addCharToBattle = (charIndex, isNPC) => {
+	WarLogger.defineAction('addCharToBattle', (state, charIndex, isNPC) => {
 		(isNPC ? npcsAdded : charsAdded).push(charIndex);
 		renderBattleAll();
-	};
+		return state;
+	});
 
 })(window.WarLogger);

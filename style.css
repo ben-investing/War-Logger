@@ -50,8 +50,12 @@ body {
     background: #4b4b4b;
 }
 
-.action-row {
+.battle-actions {
     padding: 16px 0;
+}
+
+.action-row {
+    padding: 4px;
 }
 
 .clickable { cursor: pointer; }
@@ -75,7 +79,7 @@ body {
 }
 
 .selectC {
-    padding: 0px 10px;
+    padding: 2px 6px;
     color: white;
     background: #333;
     border: 1px solid white;
