@@ -19,22 +19,32 @@
                 <button class="start-battle">Roll Initiatives</button>
             </div>
             <div class="set-initiatives-wrapper hide">
-                <div class="set-initiatives"></div>
+                <table class="set-initiatives">
+                    <thead>
+                        <th></th>
+                        <th>Initiative</th>
+                        <th>HP</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
                 <button class="commence-battle">Commence Battle</button>
             </div>
         </div>
         <div class="battle-zone hide">
-            <table class="war-grounds">
-                <thead>
+            <div class="war-grounds">
+                <table class="war-grounds-table">
+                    <thead>
                     <th></th>
                     <th>Name</th>
                     <th>HP</th>
                     <th>Aggro</th>
                     <th>Conditions</th>
-                </thead>
-                <tbody></tbody>
-            </table>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
             <div class="battle-actions">
+                <h3>Battle Actions</h3>
                 <div class="action-row">
                     <span>Attack</span>
                     <select class="battle-actions-attack-select selectC"></select>
@@ -49,10 +59,42 @@
                     <input class="reg-input battle-actions-damage-damage small inv">
                     <button class="battle-actions-damage-submit">Damage</button>
                 </div>
+                <div class="action-row">
+                    <span>Heal</span>
+                    <select class="battle-actions-heal-target selectC">
+                        <option value="-1">Self</option>
+                    </select>
+                    <select class="battle-actions-heal-type selectC">
+                        <option value="0">Potion</option>
+                        <option value="1">Healing Kit</option>
+                    </select>
+                    <span>for</span>
+                    <input class="reg-input battle-actions-heal-amount small inv">
+                    <button class="battle-actions-heal-submit">Heal</button>
+                </div>
+                <div class="action-row">
+                    <span>Condition</span>
+                    <select class="battle-actions-condition-target selectC"></select>
+                    <input class="reg-input battle-actions-condition-name small inv">
+                    <span>for</span>
+                    <select class="battle-actions-condition-duration selectC">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <span>rounds</span>
+                    <button class="battle-actions-condition-submit">Apply</button>
+                </div>
+                <div class="action-row">
+                    <button class="battle-actions-pass-turn">Pass Turn</button>
+                </div>
             </div>
+            <ul class="battle-log hide"></ul>
         </div>
         <div class="char-library">
-            <div class="add-char">
+            <div class="add-char char-library-to-hide hide">
                 <div class="add-char-title">Add Character/NPC</div>
                 <div class="add-char-form hide">
                     <div class="row">
@@ -85,12 +127,13 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="char-library-to-hide hide">
                 <span class="big2">Characters:</span>
                 <ul class="char-list"></ul>
                 <span class="big2">NPCs:</span>
                 <ul class="npc-list"></ul>
             </div>
+            <span class="minmax"><></span>
         </div>
     </div>
     <script src="scripts/data.js"></script>

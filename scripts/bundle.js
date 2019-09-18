@@ -33,5 +33,8 @@ $.fn.show = function() {
 $.fn.hide = function() {
 	return this.addClass('hide');
 }
+$.fn.disable = function() {
+	return this.prop('disabled', true);
+}
 
 _.e = _.each;

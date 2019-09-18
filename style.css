@@ -6,27 +6,31 @@ body {
     margin: auto;
     color: #d8d8d8;
     font-size: 13px;
-    max-width: 440px;
+    max-width: 540px;
     text-align: center;
     font-family: Verdana;
 }
 
 .battle-zone {
     margin: 20px;
+    border-radius: 7px;
     border: 1px solid white;
 }
 
 .char-library {
     top: 0px;
     left: 50px;
+    padding: 10px;
     position: fixed;
+    background: #101317;
     border: 1px white solid;
-    padding: 0 40px 40px 40px;
 }
 
 .add-char {
     padding: 5px;
-    margin: 40px auto;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 40px;
     width: 300px;
     background: #565656;
 }
@@ -48,14 +52,21 @@ body {
 
 .current-turn, .current-turn td {
     background: #4b4b4b;
+    font-weight: bold;
 }
 
 .battle-actions {
     padding: 16px 0;
 }
 
+.battle-log {
+    overflow: auto;
+    max-height: 100px;
+}
+
 .action-row {
     padding: 4px;
+    margin: 5px 0;
 }
 
 .clickable { cursor: pointer; }
@@ -63,6 +74,14 @@ body {
 
 .row {
     padding: 4px;
+}
+
+.minmax {
+    top: 1px;
+    left: 4px;
+    cursor: pointer;
+    position: absolute;
+    font-family: monospace;
 }
 
 .reg-input {
@@ -84,6 +103,9 @@ body {
     background: #333;
     border: 1px solid white;
     border-radius: 2px;
+    cursor: pointer;
+}
+.selectC option {
     cursor: pointer;
 }
 

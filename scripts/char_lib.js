@@ -9,6 +9,8 @@
 		$submit = $addChar.f('.add-char-submit'),
 		$title = $addChar.f('.add-char-title'),
 		$form = $addChar.f('.add-char-form'),
+		$minmax = $wrapper.f('.minmax'),
+		$toHide = $wrapper.f('.char-library-to-hide'),
 		demiInit = _.once(() => {
 			setTimeout(() => {
 				let $npc = $('.char-library .npc-list').f('.clickable').first();
@@ -24,6 +26,7 @@
 					e.stopPropagation();
 				}))));
 
+	$minmax.on('click', () => $toHide.toggle());
 	$title.on('click', () => $form.toggleClass('hide'));
 	$submit.on('click', () => {
 		let charObj = {};
