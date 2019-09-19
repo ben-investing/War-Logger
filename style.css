@@ -76,6 +76,14 @@ body {
     padding: 4px;
 }
 
+label {
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    vertical-align: middle;
+}
+
 .minmax {
     top: 1px;
     left: 4px;

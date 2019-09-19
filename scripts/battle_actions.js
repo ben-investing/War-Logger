@@ -16,28 +16,27 @@
 			}
 		}
 		return { next: nextCharRes, newRound };
-	},
-		getOptionByText = ($select, text, notDisabled) => $select.find(`option:contains("${text}")${notDisabled ? ':not([disabled])' : ''}`);
+	};
 
 	let
 		$wrapper = $('.battle-actions'),
-		$passTurn = $wrapper.f('.battle-actions-pass-turn'),
-		$attackSelect = $wrapper.f('.battle-actions-attack-select'),
-		$attackDamage = $wrapper.f('.battle-actions-attack-damage'),
-		$attackSubmit = $wrapper.f('.battle-actions-attack-submit'),
-		$damageSelect = $wrapper.f('.battle-actions-damage-select'),
-		$damageDamage = $wrapper.f('.battle-actions-damage-damage'),
-		$damageSubmit = $wrapper.f('.battle-actions-damage-submit'),
-		$healTarget = $wrapper.f('.battle-actions-heal-target'),
-		$healAmount = $wrapper.f('.battle-actions-heal-amount'),
-		$healType = $wrapper.f('.battle-actions-heal-type'),
-		$healSubmit = $wrapper.f('.battle-actions-heal-submit'),
-		$conditionTarget = $wrapper.f('.battle-actions-condition-target'),
-		$conditionName = $wrapper.f('.battle-actions-condition-name'),
-		$conditionDuration = $wrapper.f('.battle-actions-condition-duration'),
-		$conditionSubmit = $wrapper.f('.battle-actions-condition-submit'),
+		$passTurn = $wrapper.mF('.battle-actions-pass-turn'),
+		$attackTarget = $wrapper.mF('.battle-actions-attack-target'),
+		$attackDamage = $wrapper.mF('.battle-actions-attack-damage'),
+		$attackAndPass = $wrapper.mF('.battle-actions-attack-pass'),
+		$attackSubmit = $wrapper.mF('.battle-actions-attack-submit'),
+		$healTarget = $wrapper.mF('.battle-actions-heal-target'),
+		$healAmount = $wrapper.mF('.battle-actions-heal-amount'),
+		$healType = $wrapper.mF('.battle-actions-heal-type'),
+		$healSubmit = $wrapper.mF('.battle-actions-heal-submit'),
+		$conditionTarget = $wrapper.mF('.battle-actions-condition-target'),
+		$conditionName = $wrapper.mF('.battle-actions-condition-name'),
+		$conditionDuration = $wrapper.mF('.battle-actions-condition-duration'),
+		$conditionSubmit = $wrapper.mF('.battle-actions-condition-submit'),
 		currentRound, currentChar,
 		pendingActions = [],
+		$blankOption = $('<option>').val('').html(' - '),
+		getOptionByText = (text, notDisabled) => $attackTarget.f(`option:contains("${text}")${notDisabled ? ':not([disabled])' : ''}`),
 		pendAction = (action, round, char, ...args) => pendingActions.push({ action, round, char, args }),
 		actionReducers = {
 			heal: (state, targetId, amount) => {
@@ -64,21 +63,13 @@
 		};
 
 	$attackSubmit.on('click', () => {
-		let attackeeId = +$attackSelect.val(),
-			damage = +$attackDamage.val();
+		let attackeeId = $attackTarget.val(),
+			damage = $attackDamage.val(),
+			andPass = $attackAndPass.isChecked();
 
-		WarLogger
-			.dispatch('damage', attackeeId, damage)
-			.dispatch('passTurn')
-			.dispatch('redrawBattle');
-	});
-
-	$damageSubmit.on('click', () => {
-		let attackeeId = +$damageSelect.val(),
-			damage = +$damageDamage.val();
-
-		WarLogger
-			.dispatch('damage', attackeeId, damage, true)
+		attackeeId !== '' && damage !== '' && WarLogger
+			.dispatch('damage', +attackeeId, +damage)
+			.dispatch(andPass ? 'passTurn' : '')
 			.dispatch('redrawBattle');
 	});
 
@@ -118,11 +109,11 @@
 	});
 
 	WarLogger.defineAction('initializeBattleActions', (state) => {
-		$attackSelect.empty();
+		$attackTarget.empty().append($blankOption);
 		_.e([...state.get('allChars')], (charObj, i) => {
 			let $option = $('<option>').val(i).html(charObj.name);
-			$attackSelect.append($option);
-			$damageSelect.append($option.clone());
+			$attackTarget.append($option);
+			$healTarget.append($option.clone());
 			$conditionTarget.append($option.clone());
 		});
 		return state;
@@ -140,8 +131,7 @@
 			attacker.aggro = attackee.name;
 		}
 		if (!attackee.currentHP) { // He ded
-			getOptionByText($attackSelect, attackee.name).disable();
-			getOptionByText($damageSelect, attackee.name).disable();
+			getOptionByText(attackee.name).disable();
 			collectedXP += +attackee.xp;
 		}
 
@@ -169,7 +159,17 @@
 			{ next, newRound } = getNextAble(allChars, state.get('currentChar'));
 
 		newCurrentsAggro = allChars.get(next).aggro;
-		newCurrentsAggro && getOptionByText($attackSelect, newCurrentsAggro, true).prop('selected', true);
+
+		if (newCurrentsAggro) {
+			let $option = getOptionByText(newCurrentsAggro);
+			if (!$option.prop('disabled')) {
+				$option.setSelected();
+			} else {
+				$attackTarget.val('');
+			}
+		} else {
+			$attackTarget.val('');
+		}
 
 		currentRound = newRound ? round + 1 : round;
 		currentChar = next;

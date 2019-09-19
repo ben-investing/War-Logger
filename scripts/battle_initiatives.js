@@ -18,9 +18,9 @@
 	let
 		initiativeRow = _.template('<tr><td><%=name%></td><td><input type="text" value="<%=initiative%>" class="reg-input small" data-name="initiative"></td><td><input type="text" value="<%=hp%>" class="reg-input small" data-name="hp"></td></tr>'),
 		$wrapper = $('.setup-battle'),
-		$setInitsWrapper = $wrapper.f('.set-initiatives-wrapper'),
-		$setInits = $setInitsWrapper.f('.set-initiatives tbody'),
-		$commenceBattle = $setInitsWrapper.f('.commence-battle'),
+		$setInitsWrapper = $wrapper.mF('.set-initiatives-wrapper'),
+		$setInits = $setInitsWrapper.mF('.set-initiatives tbody'),
+		$commenceBattle = $setInitsWrapper.mF('.commence-battle'),
 		inputMap, fullList,
 		renderBattleList = () => _.each(fullList, (charObj, i) => {
 			let $inputRow = $(initiativeRow({
@@ -29,7 +29,7 @@
 				hp: rollDice(charObj.hp)
 			}));
 			$setInits.append($inputRow);
-			inputMap[i] = { $initiative: $inputRow.f('input[data-name="initiative"]'), $hp: $inputRow.f('input[data-name="hp"]') };
+			inputMap[i] = { $initiative: $inputRow.mF('input[data-name="initiative"]'), $hp: $inputRow.mF('input[data-name="hp"]') };
 		});
 
 	$commenceBattle.on('click', () => {
@@ -45,12 +45,14 @@
 	})
 
 	WarLogger.defineAction('goToInitiatives', (state, chars, npcs) => {
+		let emptyFields;
 		$setInitsWrapper.show();
 		inputMap = [];
 		$setInits.empty();
 		fullList = chars.concat(npcs);
 		renderBattleList();
-		inputMap[0].$initiative.focus();
+		emptyFields = _.filter(inputMap.map(item => item.$initiative), (item) => !$(item).val());
+		emptyFields[0] && emptyFields[0].focus();
 		return state.set('uiStage', 'ROLL_INITIATIVES');
 	})
 

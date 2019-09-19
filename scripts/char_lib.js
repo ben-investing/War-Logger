@@ -2,24 +2,25 @@
 ((WarLogger) => {
 	let
 		$wrapper = $('.char-library'),
-		$addChar = $wrapper.f('.add-char'),
-		$charList = $wrapper.f('.char-list'),
-		$npcList = $wrapper.f('.npc-list'),
-		$inputs = $addChar.f('.add-char-input'),
-		$submit = $addChar.f('.add-char-submit'),
-		$title = $addChar.f('.add-char-title'),
-		$form = $addChar.f('.add-char-form'),
-		$minmax = $wrapper.f('.minmax'),
-		$toHide = $wrapper.f('.char-library-to-hide'),
+		$addChar = $wrapper.mF('.add-char'),
+		$charList = $wrapper.mF('.char-list'),
+		$npcList = $wrapper.mF('.npc-list'),
+		$inputs = $addChar.mF('.add-char-input'),
+		$submit = $addChar.mF('.add-char-submit'),
+		$title = $addChar.mF('.add-char-title'),
+		$form = $addChar.mF('.add-char-form'),
+		$minmax = $wrapper.mF('.minmax'),
+		$toHide = $wrapper.mF('.char-library-to-hide'),
 		demiInit = _.once(() => {
 			setTimeout(() => {
-				let $npc = $('.char-library .npc-list').f('.clickable').first();
+				let $npc = $('.char-library .npc-list').mF('.clickable').first();
 				$npc.click(); $npc.click(); $npc.click();
-				$('.char-library .char-list').f('.clickable').first().click();
+				$('.char-library .char-list').mF('.clickable').first().click();
 			}, 200)
 		}),
 		renderGroup = ($charList, list, isNPC) => _.each(list, (item, i) =>
 			$charList.append($('<li>').addClass('clickable').html(item.name)
+				.attr('title', JSON.stringify(item, '', '\n'))
 				.on('click', () => WarLogger.dispatch('addCharToBattle', i, isNPC))
 				.append($('<span>').addClass('right-f').html('x').on('click', (e) => {
 					WarLogger.data.deleteChar(i, isNPC);

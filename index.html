@@ -43,21 +43,15 @@
                     <tbody></tbody>
                 </table>
             </div>
-            <div class="battle-actions">
+            <div class="battle-actions hide-from-popup">
                 <h3>Battle Actions</h3>
                 <div class="action-row">
                     <span>Attack</span>
-                    <select class="battle-actions-attack-select selectC"></select>
+                    <select class="battle-actions-attack-target selectC"></select>
                     <span>for</span>
-                    <input class="reg-input battle-actions-attack-damage small inv">
+                    <input class="reg-input battle-actions-attack-damage SOF small inv">
+                    <label><input type="checkbox" class="battle-actions-attack-pass" checked="checked">Pass</label>
                     <button class="battle-actions-attack-submit">Attack</button>
-                </div>
-                <div class="action-row">
-                    <span>Damage</span>
-                    <select class="battle-actions-damage-select selectC"></select>
-                    <span>for</span>
-                    <input class="reg-input battle-actions-damage-damage small inv">
-                    <button class="battle-actions-damage-submit">Damage</button>
                 </div>
                 <div class="action-row">
                     <span>Heal</span>
@@ -91,6 +85,8 @@
                     <button class="battle-actions-pass-turn">Pass Turn</button>
                 </div>
             </div>
+
+            <div class="current-char-details hide-from-popup"></div>
             <ul class="battle-log hide"></ul>
         </div>
         <div class="char-library">

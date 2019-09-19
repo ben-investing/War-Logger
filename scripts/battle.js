@@ -9,23 +9,30 @@
 
 	let
 		tableRow = _.template(`<tr class="<%= currentTurn ? 'current-turn' : ''%>">
-<td><%=i%></td>
-<td><%=name%></td>
-<td data-name="hp"><%=processedHP%></td>
-<td data-name="aggro"><%=aggro%></td>
-<td data-name="conditions"><%=conditions%></td>
-</tr>`),
+			<td><%=i%></td>
+			<td><%=name%></td>
+			<td data-name="hp"><%=processedHP%></td>
+			<td data-name="aggro"><%=aggro%></td>
+			<td data-name="conditions"><%=conditions%></td>
+			</tr>`),
+		charDetails = _.template(`
+<h2><%=data.name%></h2>
+<div>AB: <%=data.ab%></div>
+<div>AC: <%=data.ac%></div>
+`),
 		$wrapper = $('.battle-zone'),
-		$warGrounds = $wrapper.f('.war-grounds'),
-		$warGroundsBody = $warGrounds.f('.war-grounds-table tbody'),
-		$battleLog = $wrapper.f('.battle-log'),
+		$warGrounds = $wrapper.mF('.war-grounds'),
+		$charDetails = $wrapper.mF('.current-char-details'),
+		$warGroundsBody = $warGrounds.mF('.war-grounds-table tbody'),
+		$battleLog = $wrapper.mF('.battle-log'),
 		$rows,
 		$remoteBattleZone,
 		battleWindow,
 		rewriteWindow = () => {
 			if ($remoteBattleZone) {
 				let $clone = $wrapper.clone();
-				$clone.f('.battle-actions').remove();
+				$clone.f('.hide-from-popup').remove();
+				$clone.f('.show-in-popup').show();
 				$remoteBattleZone.empty().append($clone.html());
 			}
 		},
@@ -46,13 +53,14 @@
 				$warGroundsBody.append(renderedTableRow);
 				$rows = $rows.add(renderedTableRow);
 			});
+			$charDetails.html(charDetails({ data: list[currentChar] }));
 			rewriteWindow();
 		},
 		fireBattleWindow = () => {
 			battleWindow = window.open('battleWindow.html', 'BattleWindow',
 				`scrollbars=yes,width=${scrW},height=${scrH},menubar=no,left=${window.screen.width/2 - scrW/2},top=${window.screen.height/2 - scrH/2}`);
 			setTimeout(() => {
-				$remoteBattleZone = $(battleWindow.document.body).f('.battle-zone');
+				$remoteBattleZone = $(battleWindow.document.body).mF('.battle-zone');
 				rewriteWindow();
 			}, 400);
 		},

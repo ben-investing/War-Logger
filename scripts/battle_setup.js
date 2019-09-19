@@ -8,8 +8,8 @@
 
 	let
 		$wrapper = $('.pre-battle'),
-		$charList = $wrapper.f('.char-list'),
-		$startBattle = $wrapper.f('.start-battle'),
+		$charList = $wrapper.mF('.char-list'),
+		$startBattle = $wrapper.mF('.start-battle'),
 		charsAdded = [],
 		npcsAdded = [],
 		npcDuplicates = {},
