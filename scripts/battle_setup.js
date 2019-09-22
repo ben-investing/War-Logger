@@ -10,6 +10,7 @@
 		$wrapper = $('.pre-battle'),
 		$charList = $wrapper.mF('.char-list'),
 		$startBattle = $wrapper.mF('.start-battle'),
+		$clearBattle = $wrapper.mF('.clear-battle'),
 		charsAdded = [],
 		npcsAdded = [],
 		npcDuplicates = {},
@@ -32,6 +33,7 @@
 			renderBattleList(npcsAdded, true);
 		};
 
+	$clearBattle.on('click', () => WarLogger.dispatch('clearAddedChars'));
 	$startBattle.on('click', () => {
 		$wrapper.hide();
 		npcDuplicates = {};
@@ -53,6 +55,12 @@
 		)
 	})
 
+	WarLogger.defineAction('clearAddedChars', (state) => {
+		charsAdded = [];
+		npcsAdded = [];
+		renderBattleAll();
+		return state;
+	});
 	WarLogger.defineAction('addCharToBattle', (state, charIndex, isNPC) => {
 		(isNPC ? npcsAdded : charsAdded).push(charIndex);
 		renderBattleAll();

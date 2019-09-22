@@ -17,6 +17,7 @@
                 <span>Added Characters:</span>
                 <ul class="char-list"></ul>
                 <button class="start-battle">Roll Initiatives</button>
+                <button class="clear-battle">Clear</button>
             </div>
             <div class="set-initiatives-wrapper hide">
                 <table class="set-initiatives">
@@ -69,7 +70,7 @@
                 <div class="action-row">
                     <span>Condition</span>
                     <select class="battle-actions-condition-target selectC"></select>
-                    <input class="reg-input battle-actions-condition-name small inv">
+                    <select class="battle-actions-condition-name selectC"></select>
                     <span>for</span>
                     <select class="battle-actions-condition-duration selectC">
                         <option value="1">1</option>
@@ -89,51 +90,78 @@
             <div class="current-char-details hide-from-popup"></div>
             <ul class="battle-log hide"></ul>
         </div>
-        <div class="char-library">
-            <div class="add-char char-library-to-hide hide">
-                <div class="add-char-title">Add Character/NPC</div>
-                <div class="add-char-form hide">
-                    <div class="row">
-                        Name <input type="text" class="add-char-input reg-input" data-name="name" value="Ben">
+        <div class="panel">
+            <div class="char-library">
+                <div class="panel-title toggle" data-toggle-target="library">Library</div>
+                <div class="char-library-to-hide" data-toggle="library">
+                    <div class="add-char char-library-to-hide">
+                        <div class="add-char-title">New Character</div>
+                        <div class="add-char-form hide">
+                            <div class="row">
+                                Name <input type="text" class="add-char-input reg-input" data-name="name" value="">
+                            </div>
+                            <div class="row">
+                                Initiative <input type="text" class="add-char-input reg-input" data-name="initiative">
+                            </div>
+                            <div class="row">
+                                AC <input type="text" class="add-char-input reg-input" data-name="ac" value="">
+                            </div>
+                            <div class="row">
+                                AB <input type="text" class="add-char-input reg-input" data-name="ab">
+                            </div>
+                            <div class="row">
+                                HP <input type="text" class="add-char-input reg-input" data-name="hp">
+                            </div>
+                            <div class="row">
+                                XP <input type="text" class="add-char-input reg-input" data-name="xp">
+                            </div>
+                            <div class="row">
+                                Type
+                                <select class="add-char-input reg-input" data-name="type">
+                                    <option value="npc">NPC</option>
+                                    <option value="char">Character</option>
+                                </select>
+                            </div>
+                            <div class="row">
+                                <button class="add-char-submit">Add</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row">
-                        Initiative <input type="text" class="add-char-input reg-input" data-name="initiative">
+                    <span class="big1">Characters:</span>
+                    <ul class="char-list"></ul>
+                    <span class="big1">NPCs:</span>
+                    <ul class="npc-list"></ul>
+                    <span class="big1">Spawns:</span>
+                    <ul class="spawns-list"></ul>
+                    <button data-toggle-target="newSpawn" class="spawns-new-spawn-button smol-btn">New Spawn</button>
+                    <div data-toggle="newSpawn" class="hide">
+                        <div>* Use Library *</div>
+                        <div class="spawns-new-spawn-list"></div>
+                        <div><input class="spawns-new-spawn-name reg-input" placeholder="Spawn Name"></div>
+                        <button class="spawns-new-spawn-save smol-btn" data-toggle-target="newSpawn">Save</button>
+                        <button class="spawns-new-spawn-cancel smol-btn" data-toggle-target="newSpawn">Cancel</button>
                     </div>
-                    <div class="row">
-                        AC <input type="text" class="add-char-input reg-input" data-name="ac" value="20">
+                </div>
+                <span class="minmax"><></span>
+            </div>
+            <div class="settings-panel">
+                <div class="panel-title" data-toggle-target="conf">Config</div>
+                <div data-toggle="conf" class="conf-container">
+                    <div data-toggle-target="conditions" class="conf-conditions-edit">Conditions</div>
+                    <div data-toggle="conditions" class="hide">
+                        <div><textarea class="conf-conditions"></textarea></div>
+                        <button class="smol-btn conf-conditions-save" data-toggle-target="conditions">Save</button>
                     </div>
-                    <div class="row">
-                        AB <input type="text" class="add-char-input reg-input" data-name="ab">
-                    </div>
-                    <div class="row">
-                        HP <input type="text" class="add-char-input reg-input" data-name="hp">
-                    </div>
-                    <div class="row">
-                        XP <input type="text" class="add-char-input reg-input" data-name="xp">
-                    </div>
-                    <div class="row">
-                        Type
-                        <select class="add-char-input reg-input" data-name="type">
-                            <option value="npc">NPC</option>
-                            <option value="char">Character</option>
-                        </select>
-                    </div>
-                    <div class="row">
-                        <button class="add-char-submit">Add</button>
+                    <div>
+                        <label><input type="checkbox" class="settings-btlppp" checked="checked"> Battle Popup</label>
                     </div>
                 </div>
             </div>
-            <div class="char-library-to-hide hide">
-                <span class="big2">Characters:</span>
-                <ul class="char-list"></ul>
-                <span class="big2">NPCs:</span>
-                <ul class="npc-list"></ul>
-            </div>
-            <span class="minmax"><></span>
         </div>
     </div>
     <script src="scripts/data.js"></script>
     <script src="scripts/char_lib.js"></script>
+    <script src="scripts/settings.js"></script>
     <script src="scripts/battle_setup.js"></script>
     <script src="scripts/battle_initiatives.js"></script>
     <script src="scripts/battle.js"></script>

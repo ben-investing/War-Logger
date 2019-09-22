@@ -60,6 +60,10 @@
 				}
 			})
 			return resultState;
+		},
+		renderConditions = () => {
+			$conditionName.empty();
+			WarLogger.data.getConditions().map(cond => $conditionName.append($('<option>').val(cond).text(cond)));
 		};
 
 	$attackSubmit.on('click', () => {
@@ -108,7 +112,13 @@
 			.dispatch('redrawBattle');
 	});
 
+	WarLogger.defineAction('conditionsChanged', (state) => {
+		renderConditions();
+		return state;
+	});
+	
 	WarLogger.defineAction('initializeBattleActions', (state) => {
+		renderConditions()
 		$attackTarget.empty().append($blankOption);
 		_.e([...state.get('allChars')], (charObj, i) => {
 			let $option = $('<option>').val(i).html(charObj.name);

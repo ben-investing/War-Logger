@@ -4,8 +4,7 @@
 	const injuries = ['Uninjured', 'Barely Injured', 'Barely Injured', 'Injured', 'Injured', 'Badly Injured', 'Badly Injured', 'Near Death'],
 		injuryMeter = ratio => ratio === 1 ? 'Dead' : injuries[Math.floor(ratio * injuries.length)],
 		scrW = 600, scrH = 500,
-		{ List } = Immutable,
-		skipBattleWindow = false;
+		{ List } = Immutable;
 
 	let
 		tableRow = _.template(`<tr class="<%= currentTurn ? 'current-turn' : ''%>">
@@ -25,6 +24,7 @@
 		$charDetails = $wrapper.mF('.current-char-details'),
 		$warGroundsBody = $warGrounds.mF('.war-grounds-table tbody'),
 		$battleLog = $wrapper.mF('.battle-log'),
+		$settingsPopup = $('.settings-btlppp'),
 		$rows,
 		$remoteBattleZone,
 		battleWindow,
@@ -68,6 +68,11 @@
 			if (!_.reduce([...state.get('allChars')], (total, charObj) => total + (charObj.isNPC ? +charObj.currentHP : 0), 0)) {
 				WarLogger.log(`Total XP: ${state.get('collectedXP')}<br><br>`);
 				WarLogger.log('Victory!');
+				WarLogger.data.saveNewLogEntry({
+					// Collect more data? Battle duration...Chars..
+					time: Date.now(),
+					html: $battleLog.html()
+				});
 			}
 		};
 
@@ -83,7 +88,7 @@
 			charObj.currentHP = charObj.rolledHP;
 			charObj.isNPC = charObj.type === 'npc';
 		});
-		!skipBattleWindow && fireBattleWindow();
+		$settingsPopup.isChecked() && fireBattleWindow();
 		renderBattleList(allChars, 0);
 		return state
 			.set('uiStage', 'BATTLE')

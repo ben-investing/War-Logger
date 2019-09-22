@@ -6,7 +6,7 @@ body {
     margin: auto;
     color: #d8d8d8;
     font-size: 13px;
-    max-width: 540px;
+    max-width: 560px;
     text-align: center;
     font-family: Verdana;
 }
@@ -17,7 +17,7 @@ body {
     border: 1px solid white;
 }
 
-.char-library {
+.panel {
     top: 0px;
     left: 50px;
     padding: 10px;
@@ -26,20 +26,38 @@ body {
     border: 1px white solid;
 }
 
+.panel-title {
+    font-size: 25px;
+    font-style: italic;
+    font-family: serif;
+    margin-bottom: 5px;
+}
+
+.panel>div {
+    border-bottom: 1px solid #333;
+}
+
 .add-char {
-    padding: 5px;
     margin: auto;
     margin-top: 10px;
-    margin-bottom: 40px;
-    width: 300px;
-    background: #565656;
 }
 
 .add-char-title {
-    font-size: 16px;
-    cursor: pointer;
     margin: 11px;
-    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.conf-container>div {
+    margin: 5px 0;
+}
+
+.conf-conditions {
+    height: 90px;
+    width: 100px;
+    color: white;
+    background: #333;
+    border-radius: 3px;
 }
 
 .initiative-row {
@@ -69,6 +87,12 @@ body {
     margin: 5px 0;
 }
 
+.smol-btn {
+    line-height: 12px;
+    font-size: 11px;
+    margin: 7px;
+}
+
 .clickable { cursor: pointer; }
 .clickable:hover { color: aquamarine }
 
@@ -76,7 +100,7 @@ body {
     padding: 4px;
 }
 
-label {
+label, [data-toggle-target], input[type="checkbox"] {
     cursor: pointer;
 }
 

@@ -9,19 +9,10 @@ window.cl = console.log;
 			window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 25 }) || compose,
 		cl = console.log,
 		actionLog = [],
-		wait3 = () => new Promise(res => setTimeout(res, 3000)),
 		logger = store => thunkedDispatch => action => {
 			cl(action);
 			actionLog.push(action);
 			return thunkedDispatch(action);
-		},
-		errorMonitor = store => thunkedDispatch => action => {
-			try {
-				return thunkedDispatch(action);
-			} catch (e) {
-				cl('Caught Exception for action: ', action);
-				throw e;
-			}
 		},
 		promiseSupport = store => thunkedDispatch => action => {
 			if (action.constructor === Promise) {
@@ -30,7 +21,8 @@ window.cl = console.log;
 				return thunkedDispatch(action);
 			}
 		},
-		middlewareCollection = [ reduxThunk, logger, promiseSupport ];
+		middlewareCollection = [ reduxThunk, logger, promiseSupport ],
+		$togglers = $('[data-toggle-target]');
 
 	let
 		initialStates = {
@@ -65,6 +57,13 @@ window.cl = console.log;
 
 	printUIStage();
 	WarLogger.data.renderList();
+
+	_.e($togglers, toggler => {
+		let $t = $(toggler),
+			target = $t.data('toggleTarget'),
+			$targets = $(`[data-toggle="${target}"]`);
+		$t.on('click', () => $targets.toggle());
+	})
 
 })(window.Redux, window.Immutable, window.ReduxThunk.default, window.WarLogger)
 
