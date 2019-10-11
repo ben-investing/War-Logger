@@ -19,11 +19,11 @@
 		$toHide = $wrapper.mF('.char-library-to-hide'),
 		newSpawnMode = false,
 		newSpawnAdded,
-		demiInit = _.once(() => {
+		demiInit = 1 ? _.noop : _.once(() => {
 			setTimeout(() => {
-				let $npc = $('.char-library .npc-list').mF('.clickable').first();
+				let $npc = $('.char-library .npc-list').f('.clickable').first();
 				$npc.click(); $npc.click(); $npc.click();
-				$('.char-library .char-list').mF('.clickable').first().click();
+				$('.char-library .char-list').f('.clickable').first().click();
 			}, 200)
 		}),
 		addToNewSpawn = (charId, isNPC) => {

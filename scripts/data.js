@@ -46,7 +46,7 @@
 				data.spawns.splice(spawnId, 1);
 				updateLS();
 			},
-			getConditions: () => data.conditions,
+			getConditions: () => data.conditions || [],
 			saveConditions: conditions => {
 				data.conditions = conditions;
 				updateLS();

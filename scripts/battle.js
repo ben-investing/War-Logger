@@ -3,7 +3,7 @@
 
 	const injuries = ['Uninjured', 'Barely Injured', 'Barely Injured', 'Injured', 'Injured', 'Badly Injured', 'Badly Injured', 'Near Death'],
 		injuryMeter = ratio => ratio === 1 ? 'Dead' : injuries[Math.floor(ratio * injuries.length)],
-		scrW = 600, scrH = 500,
+		scrW = 900, scrH = 500,
 		{ List } = Immutable;
 
 	let
@@ -16,52 +16,61 @@
 			</tr>`),
 		charDetails = _.template(`
 <h2><%=data.name%></h2>
+<div>HP: <%=health%></div>
 <div>AB: <%=data.ab%></div>
 <div>AC: <%=data.ac%></div>
+<div><%=data.conditions.join(', ')%></div>
 `),
+		charDetailsSelector = '.current-char-details',
 		$wrapper = $('.battle-zone'),
 		$warGrounds = $wrapper.mF('.war-grounds'),
-		$charDetails = $wrapper.mF('.current-char-details'),
+		$charDetails = $wrapper.mF(charDetailsSelector),
 		$warGroundsBody = $warGrounds.mF('.war-grounds-table tbody'),
 		$battleLog = $wrapper.mF('.battle-log'),
+		$battleActionsOpenPopup = $wrapper.mF('.battle-actions-open-popup'),
 		$settingsPopup = $('.settings-btlppp'),
 		$rows,
 		$remoteBattleZone,
 		battleWindow,
-		rewriteWindow = () => {
+		rewriteWindow = (showDetails) => {
 			if ($remoteBattleZone) {
 				let $clone = $wrapper.clone();
-				$clone.f('.hide-from-popup').remove();
+				$clone.mF(charDetailsSelector)[showDetails ? 'removeClass' : 'addClass']('hide-from-popup');
 				$clone.f('.show-in-popup').show();
 				$remoteBattleZone.empty().append($clone.html());
 			}
 		},
-		renderBattleList = (list, currentChar) => {
+		renderBattleList = (list, currentCharId) => {
 			$warGroundsBody.empty();
 			$rows = $();
 			_.each(list, ({ name, currentHP, rolledHP, isNPC, aggro, conditions }, i) => {
-				let renderedTableRow;
+				let renderedTableRow,
+					health = `${currentHP}/${rolledHP}`,
+					isCurrent = i === currentCharId;
 				renderedTableRow = $(tableRow({
 					name,
-					processedHP: isNPC ? injuryMeter(1 - currentHP/rolledHP) : `${currentHP}/${rolledHP}`,
+					processedHP: isNPC ? injuryMeter(1 - currentHP/rolledHP) : health,
 					i: i + 1,
 					aggro: aggro || '',
-					currentTurn: i === currentChar,
+					currentTurn: isCurrent,
 					conditions: conditions.join(',')
 				}));
 
 				$warGroundsBody.append(renderedTableRow);
 				$rows = $rows.add(renderedTableRow);
+				if (isCurrent) {
+					$charDetails.html(charDetails({ data: list[currentCharId], health }));
+				}
 			});
-			$charDetails.html(charDetails({ data: list[currentChar] }));
-			rewriteWindow();
+			rewriteWindow(!list[currentCharId].isNPC);
 		},
-		fireBattleWindow = () => {
+		fireBattleWindow = (showDetails) => {
 			battleWindow = window.open('battleWindow.html', 'BattleWindow',
 				`scrollbars=yes,width=${scrW},height=${scrH},menubar=no,left=${window.screen.width/2 - scrW/2},top=${window.screen.height/2 - scrH/2}`);
 			setTimeout(() => {
-				$remoteBattleZone = $(battleWindow.document.body).mF('.battle-zone');
-				rewriteWindow();
+				let $body = $(battleWindow.document.body);
+				$remoteBattleZone = $body.addClass('popup-body').mF('.battle-zone');
+				rewriteWindow(showDetails);
 			}, 400);
 		},
 		announceIfVictorious = (state) => {
@@ -76,6 +85,8 @@
 			}
 		};
 
+	$battleActionsOpenPopup.on('click', fireBattleWindow);
+
 	WarLogger.defineAction('redrawBattle', (state) => {
 		announceIfVictorious(state);
 		renderBattleList([...state.get('allChars')], state.get('currentChar'));
@@ -88,7 +99,7 @@
 			charObj.currentHP = charObj.rolledHP;
 			charObj.isNPC = charObj.type === 'npc';
 		});
-		$settingsPopup.isChecked() && fireBattleWindow();
+		$settingsPopup.isChecked() && fireBattleWindow(!allChars[0].isNPC);
 		renderBattleList(allChars, 0);
 		return state
 			.set('uiStage', 'BATTLE')
