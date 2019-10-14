@@ -10,9 +10,10 @@
 			chars: [],
 			npcs: [],
 			spawns: [],
-			logs: []
+			log: []
 		},
-		updateLS = () => localStorage.setItem('data', JSON.stringify(data)),
+		getDataJSON = () => JSON.stringify(data),
+		saveToLS = (customJSON) => localStorage.setItem('data', customJSON || getDataJSON()),
 		renderList = () => window.WarLogger.dispatch('INIT_LIB', data.chars, data.npcs),
 		reducers = {};
 
@@ -20,40 +21,46 @@
 		defineAction: (actionLabel, reducer) => reducers[actionLabel] = reducer,
 		reducers,
 		data: {
-			getSpawns: () => data.spawns || [],
+			getDataJSON,
+			loadDataJSON: (dataJSON) => {
+				saveToLS(dataJSON);
+				data = JSON.parse(dataJSON);
+				renderList();
+			},
 			renderList,
+			getSpawns: () => data.spawns || [],
 			getChar: (index, isNPC) => (isNPC ? data.npcs : data.chars)[index],
 			addChar: charObj => {
 				data.chars.push(charObj);
-				updateLS();
+				saveToLS();
 				renderList();
 			},
 			addNPC: npcObj => {
 				data.npcs.push(npcObj);
-				updateLS();
+				saveToLS();
 				renderList();
 			},
 			deleteChar: (index, isNPC) => {
 				(isNPC ? data.npcs : data.chars).splice(index, 1);
-				updateLS();
+				saveToLS();
 				renderList();
 			},
 			addSpawn: spawnObj => {
 				data.spawns.push(spawnObj);
-				updateLS();
+				saveToLS();
 			},
 			deleteSpawn: spawnId => {
 				data.spawns.splice(spawnId, 1);
-				updateLS();
+				saveToLS();
 			},
 			getConditions: () => data.conditions || [],
 			saveConditions: conditions => {
 				data.conditions = conditions;
-				updateLS();
+				saveToLS();
 			},
 			saveNewLogEntry: entry => {
 				data.log.push(entry);
-				updateLS();
+				saveToLS();
 			}
 		}
 	}

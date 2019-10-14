@@ -32,10 +32,13 @@
 		$conditionTarget = $wrapper.mF('.battle-actions-condition-target'),
 		$conditionName = $wrapper.mF('.battle-actions-condition-name'),
 		$conditionDuration = $wrapper.mF('.battle-actions-condition-duration'),
+		$conditionLog = $wrapper.mF('.battle-actions-condition-log'),
 		$conditionSubmit = $wrapper.mF('.battle-actions-condition-submit'),
 		currentRound, currentChar,
 		pendingActions = [],
 		$blankOption = $('<option>').val('').html(' - '),
+		clearVals = (...inputs) => _.e(inputs, $input => $input.val('')),
+		clearAndAddBlank = (...selects) => _.e(selects, $select => $select.empty().append($blankOption.clone())),
 		getOptionByText = (text, notDisabled) => $attackTarget.f(`option:contains("${text}")${notDisabled ? ':not([disabled])' : ''}`),
 		pendAction = (action, round, char, ...args) => pendingActions.push({ action, round, char, args }),
 		actionReducers = {
@@ -118,8 +121,9 @@
 	});
 	
 	WarLogger.defineAction('initializeBattleActions', (state) => {
-		renderConditions()
-		$attackTarget.empty().append($blankOption);
+		renderConditions();
+		clearVals($attackDamage, $healAmount);
+		clearAndAddBlank($attackTarget, $healTarget, $conditionTarget);
 		_.e([...state.get('allChars')], (charObj, i) => {
 			let $option = $('<option>').val(i).html(charObj.name);
 			$attackTarget.append($option);
@@ -156,7 +160,7 @@
 		if (!target.conditions) {
 			target.conditions = [];
 		}
-		WarLogger.log(`${target.name} is ${name}!`);
+		$conditionLog.isChecked() && WarLogger.log(`${target.name} is ${name}!`);
 		target.conditions.push(name);
 		pendAction('removeCondition', state.get('round') + duration, state.get('currentChar'), name, targetId);
 		return state;

@@ -50,7 +50,8 @@ window.cl = console.log;
 	Object.assign(WarLogger, {
 		dispatch: (type, ...args) => store.dispatch({ type, args }) && WarLogger,
 		subscribe: handler => store.subscribe(handler),
-		getBattleState: () => store.getState().Battle
+		getBattleState: () => store.getState().Battle,
+		getLocalDate: () => `${new Date().toLocaleTimeString()} ${new Date().toLocaleDateString()}`
 	});
 
 	store.subscribe(printUIStage);

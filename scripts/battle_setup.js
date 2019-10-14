@@ -58,6 +58,7 @@
 	WarLogger.defineAction('clearAddedChars', (state) => {
 		charsAdded = [];
 		npcsAdded = [];
+		$wrapper.show();
 		renderBattleAll();
 		return state;
 	});

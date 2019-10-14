@@ -30,6 +30,7 @@
 		$battleActionsOpenPopup = $wrapper.mF('.battle-actions-open-popup'),
 		$settingsPopup = $('.settings-btlppp'),
 		$rows,
+		$battleStartTime,
 		$remoteBattleZone,
 		battleWindow,
 		rewriteWindow = (showDetails) => {
@@ -74,12 +75,14 @@
 			}, 400);
 		},
 		announceIfVictorious = (state) => {
-			if (!_.reduce([...state.get('allChars')], (total, charObj) => total + (charObj.isNPC ? +charObj.currentHP : 0), 0)) {
+			let allCharsArr = [...state.get('allChars')];
+			if (!_.reduce(allCharsArr, (total, charObj) => total + (charObj.isNPC ? +charObj.currentHP : 0), 0)) {
 				WarLogger.log(`Total XP: ${state.get('collectedXP')}<br><br>`);
 				WarLogger.log('Victory!');
 				WarLogger.data.saveNewLogEntry({
-					// Collect more data? Battle duration...Chars..
-					time: Date.now(),
+					allChars: allCharsArr.map(({ name }) => name),
+					timeOnEnd: WarLogger.getLocalDate(),
+					duration: `${((Date.now() - $battleStartTime)/60000).toFixed(2)} Minutes`,
 					html: $battleLog.html()
 				});
 			}
@@ -94,6 +97,8 @@
 	});
 
 	WarLogger.defineAction('commenceBattle', (state, allChars) => {
+		$battleLog.empty();
+		$battleStartTime = Date.now();
 		$wrapper.show();
 		_.each(allChars, charObj => {
 			charObj.currentHP = charObj.rolledHP;
